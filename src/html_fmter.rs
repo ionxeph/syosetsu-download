@@ -21,5 +21,6 @@ pub fn fmt_html(html: &str) -> String {
     }
     result.push('\n');
     result.push_str("================");
+    result.push('\n');
     result
 }
