@@ -12,15 +12,41 @@ pub fn fmt_html(html: &str) -> String {
     result.push('\n');
     // add the rest
     for node in document.find(Attr("id", "novel_honbun").descendant(Name("p"))) {
+        let inner_html = node.inner_html();
+        let trimmed = inner_html.trim();
         // ignore br
-        if node.inner_html().trim() == "<br>" {
+        if trimmed == "<br>" {
             continue;
         }
-        result.push_str(node.inner_html().trim());
+        // handle furigana
+        if trimmed.contains("<ruby>") {
+            let handled = handle_furigana(trimmed.to_owned());
+            // let handled = handle_furigana(trimmed)
+            //     .unwrap_or_else(|_| panic!("Handling furigana failed: {}", trimmed));
+            result.push_str(&handled);
+            result.push('\n');
+            continue;
+        }
+        result.push_str(trimmed);
         result.push('\n');
     }
     result.push('\n');
     result.push_str("================");
     result.push('\n');
+    result.push('\n');
     result
+}
+
+fn handle_furigana(unhandled: String) -> String {
+    unhandled
+        .trim()
+        .to_owned()
+        .replace("<ruby>", "")
+        .replace("</ruby>", "")
+        .replace("<rb>", "")
+        .replace("</rb>", "")
+        .replace("<rp>", "")
+        .replace("</rp>", "")
+        .replace("<rt>", "")
+        .replace("</rt>", "")
 }
