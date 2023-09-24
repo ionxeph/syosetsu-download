@@ -1,11 +1,19 @@
 use reqwest::{self, header};
-use std::{fs, io};
+use std::{env, fs, io};
 
 mod html_fmter;
 use html_fmter::fmt_html;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    println!(
+        "{}",
+        env::current_dir()
+            .unwrap()
+            .into_os_string()
+            .into_string()
+            .unwrap()
+    );
     println!("Please input ncode.");
     let mut ncode = String::new();
     io::stdin()
@@ -69,11 +77,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             file_title = trimmed_file_name
         )
     );
+    fs::create_dir_all("output")?;
     fs::write(
         format!("output/{file_title}.txt", file_title = trimmed_file_name),
         combined_txt,
     )
     .expect("Unable to write file");
 
+    std::thread::sleep(std::time::Duration::from_secs(5));
     Ok(())
 }
