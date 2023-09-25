@@ -60,8 +60,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     for chapter in start_ch..=end_ch {
         let request_url = format!(
             "https://ncode.syosetu.com/{ncode}/{chapter}/",
-            ncode = ncode.trim(),
-            chapter = chapter
+            ncode = ncode.trim()
         );
 
         let res = client.get(&request_url).send().await?.text().await?;
