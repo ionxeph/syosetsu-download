@@ -9,3 +9,4 @@ edition = "2021"
 reqwest = { version = "0" }
 tokio = { version = "1.0.2", features = ["full"] }
 select = { version = "0" }
+futures =  "0" 
