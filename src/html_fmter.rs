@@ -24,12 +24,12 @@ pub fn fmt_html(html: &str) -> String {
             let handled = handle_furigana(trimmed.to_owned());
             // let handled = handle_furigana(trimmed)
             //     .unwrap_or_else(|_| panic!("Handling furigana failed: {}", trimmed));
-            result.push_str("  ");
+            result.push_str("　　");
             result.push_str(&handled);
             result.push('\n');
             continue;
         }
-        result.push_str("  ");
+        result.push_str("　　");
         result.push_str(trimmed);
         result.push('\n');
     }

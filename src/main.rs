@@ -46,6 +46,32 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .read_line(&mut file_title)
         .expect("Failed to read file title");
 
+    let combined_txt = request_data(start_ch, end_ch, ncode).await?;
+
+    let trimmed_file_name = &file_title.trim();
+    println!(
+        "{}",
+        &format!(
+            "writing to output/{file_title}.txt",
+            file_title = trimmed_file_name
+        )
+    );
+    fs::create_dir_all("output")?;
+    fs::write(
+        format!("output/{file_title}.txt", file_title = trimmed_file_name),
+        combined_txt,
+    )
+    .expect("Unable to write file");
+
+    std::thread::sleep(std::time::Duration::from_secs(5));
+    Ok(())
+}
+
+async fn request_data(
+    start_ch: i32,
+    end_ch: i32,
+    ncode: String,
+) -> Result<String, Box<dyn std::error::Error>> {
     let mut headers = header::HeaderMap::new();
     headers.insert(
         header::USER_AGENT,
@@ -68,21 +94,5 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         combined_txt.push_str(&fmt_html(&res));
     }
 
-    let trimmed_file_name = &file_title.trim();
-    println!(
-        "{}",
-        &format!(
-            "writing to output/{file_title}.txt",
-            file_title = trimmed_file_name
-        )
-    );
-    fs::create_dir_all("output")?;
-    fs::write(
-        format!("output/{file_title}.txt", file_title = trimmed_file_name),
-        combined_txt,
-    )
-    .expect("Unable to write file");
-
-    std::thread::sleep(std::time::Duration::from_secs(5));
-    Ok(())
+    Ok(combined_txt)
 }
