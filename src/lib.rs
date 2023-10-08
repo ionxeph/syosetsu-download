@@ -23,7 +23,7 @@ pub async fn request_data(
 
     let mut urls = Vec::with_capacity((end_ch - start_ch + 1) as usize);
     let mut combined_txt = String::new();
-    for chapter in start_ch..=end_ch {
+    for (idx, chapter) in (start_ch..=end_ch).enumerate() {
         let request_url = format!(
             "https://ncode.syosetu.com/{ncode}/{chapter}/",
             ncode = ncode.trim()
@@ -31,11 +31,7 @@ pub async fn request_data(
 
         urls.push(request_url);
 
-        combined_txt.push_str(&format!("%%%{}&&&", chapter - 1));
-
-        // let res = client.get(&request_url).send().await?.text().await?;
-
-        // combined_txt.push_str(&fmt_html(&res));
+        combined_txt.push_str(&format!("%%%{}&&&", idx));
     }
 
     let fetches = stream::iter(urls)
