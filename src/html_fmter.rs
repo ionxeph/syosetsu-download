@@ -44,6 +44,8 @@ fn handle_furigana(unhandled: String) -> String {
     unhandled
         .trim()
         .to_owned()
+        .replace("<span class=\"ruby-wrap\">", "")
+        .replace("</span>", "")
         .replace("<ruby>", "")
         .replace("</ruby>", "")
         .replace("<rb>", "")
